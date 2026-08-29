@@ -19,9 +19,10 @@ async function exists(p: string): Promise<boolean> {
   }
 }
 
-async function pruneEmptyParents(filePath: string): Promise<void> {
+async function pruneEmptyParents(filePath: string, scopeRoot: string): Promise<void> {
   let dir = path.dirname(filePath);
   for (let i = 0; i < 3; i++) {
+    if (path.resolve(dir) === scopeRoot) return;
     try {
       const entries = await fs.readdir(dir);
       if (entries.length > 0) return;
@@ -49,6 +50,7 @@ export async function runUninstall(
 ): Promise<UninstallSummary> {
   const manifestFile = manifestPath(scope, cwd);
   const removed: string[] = [];
+  const scopeRoot = scope === "user" ? path.resolve(homeDir()) : path.resolve(cwd);
 
   if (!(await exists(manifestFile))) {
     const credentialsPurged = purgeCredentials ? await purgeCredentialsFile() : false;
@@ -56,13 +58,19 @@ export async function runUninstall(
   }
 
   const raw = await fs.readFile(manifestFile, "utf-8");
-  const manifest = JSON.parse(raw) as { files: { path: string }[] };
+  let manifest: { files: { path: string }[] };
+  try {
+    manifest = JSON.parse(raw) as { files: { path: string }[] };
+  } catch {
+    const credentialsPurged = purgeCredentials ? await purgeCredentialsFile() : false;
+    return { scope, removed, hadManifest: false, credentialsPurged };
+  }
 
   for (const file of manifest.files) {
     if (await exists(file.path)) {
       await fs.unlink(file.path);
       removed.push(file.path);
-      await pruneEmptyParents(file.path);
+      await pruneEmptyParents(file.path, scopeRoot);
     }
   }
 
