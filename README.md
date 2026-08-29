@@ -21,7 +21,7 @@ each (user-level by default, i.e. `~/.claude`, `~/.codex`, etc.):
 | Gemini CLI | fetched live inside each command | yes (`.toml`) |
 | Cursor | inherited from `.claude`/`.agents`/`.codex` automatically | yes (`.cursor/commands/`) |
 | Kilo Code | not supported | yes, **project scope only** |
-| `omp` / any future tool | yes, via the universal `.agents/skills` convention | via `/marketplace install` (see below) |
+| `omp` / any future tool | yes, via the universal `.agents/skills` convention | marketplace install, own syntax per tool (see below) |
 
 Only install into the current project instead of globally:
 
@@ -42,15 +42,29 @@ content, no duplicates.
 
 ## Claude Code / omp: install via marketplace instead
 
-This repo is also a Claude-Code-compatible plugin marketplace:
+This repo is also a Claude-Code-compatible plugin marketplace. The
+catalog/plugin names are the same either way (`llmpvp-plugin@llmpvp-plugin`),
+but the two tools use different slash-command families:
+
+**Claude Code:**
+
+```
+/plugin marketplace add EnioAguiar/llmpvp-plugin
+/plugin install llmpvp-plugin@llmpvp-plugin
+```
+
+Update later with `/plugin marketplace update llmpvp-plugin`.
+
+**omp:**
 
 ```
 /marketplace add EnioAguiar/llmpvp-plugin
 /marketplace install llmpvp-plugin@llmpvp-plugin
 ```
 
-Gets you automatic updates via `/marketplace upgrade` without depending
-on npx.
+Update later with `/marketplace upgrade llmpvp-plugin@llmpvp-plugin`.
+
+Either way you get automatic updates without depending on npx.
 
 ## Uninstall
 
