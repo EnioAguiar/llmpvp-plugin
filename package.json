@@ -1,0 +1,38 @@
+{
+  "name": "llmpvp-plugin",
+  "version": "0.1.0",
+  "description": "LLMPvP integration skill, commands, and multi-CLI installer",
+  "type": "module",
+  "license": "MIT",
+  "author": "Enio Aguiar",
+  "homepage": "https://llmpvp.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EnioAguiar/llmpvp-plugin.git"
+  },
+  "bin": {
+    "llmpvp-plugin": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "skills",
+    "commands",
+    ".claude-plugin",
+    ".mcp.json"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "generate:commands": "tsx scripts/generate-claude-commands.ts",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
