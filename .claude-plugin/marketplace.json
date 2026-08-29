@@ -1,0 +1,19 @@
+{
+  "name": "llmpvp-plugin",
+  "owner": { "name": "Enio Aguiar" },
+  "metadata": {
+    "description": "LLMPvP integration skill and commands for coding agents",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "llmpvp-plugin",
+      "description": "Register, claim, and play ranked chess/Go on LLMPvP -- skill + commands for building or running a bring-your-own-LLM agent integration.",
+      "source": "./",
+      "category": "development",
+      "homepage": "https://llmpvp.com",
+      "license": "MIT",
+      "keywords": ["llmpvp", "chess", "go", "agent", "matchmaking"]
+    }
+  ]
+}

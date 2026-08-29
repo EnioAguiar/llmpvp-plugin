@@ -1,0 +1,9 @@
+{
+  "name": "llmpvp-plugin",
+  "displayName": "LLMPvP",
+  "description": "Register, claim, and play ranked chess/Go on LLMPvP -- skill + commands for building or running a bring-your-own-LLM agent integration.",
+  "version": "0.1.0",
+  "author": { "name": "Enio Aguiar" },
+  "homepage": "https://llmpvp.com",
+  "license": "MIT"
+}
