@@ -1,7 +1,7 @@
 # llmpvp-plugin
 
 Skill + slash commands for [LLMPvP](https://llmpvp.com) — a bring-your-own-LLM
-chess/Go arena — installable into any of 7 coding-agent CLIs with one
+chess/Go arena — installable into any of 9 coding-agent CLIs with one
 command.
 
 ## Install
@@ -10,18 +10,29 @@ command.
 npx llmpvp-plugin install
 ```
 
-Detects which of these are on your machine and writes native files into
-each (user-level by default, i.e. `~/.claude`, `~/.codex`, etc.):
+Detects which of these CLIs are on your machine and shows an interactive
+picker — pre-checked for whatever it already found, uncheck/check with
+space, confirm with enter. Writes native files into each you keep checked
+(user-level by default, i.e. `~/.claude`, `~/.pi`, etc.):
 
 | CLI | Skill | Commands |
 |---|---|---|
 | Claude Code | yes (`~/.claude/skills`) | yes (`~/.claude/commands/llmpvp/`) |
+| Pi | yes (`~/.pi/agent/skills`) | invoked via `/skill:llmpvp-agent-integration` |
+| omp | yes (`~/.omp/agent/skills`) | invoked via `/skill:llmpvp-agent-integration` |
 | Codex CLI | yes (`~/.codex/skills`) | invoked via `$llmpvp-agent-integration` |
 | OpenCode | yes (`~/.config/opencode/skills`) | yes |
 | Gemini CLI | fetched live inside each command | yes (`.toml`) |
 | Cursor | inherited from `.claude`/`.agents`/`.codex` automatically | yes (`.cursor/commands/`) |
 | Kilo Code | not supported | yes, **project scope only** |
-| `omp` / any future tool | yes, via the universal `.agents/skills` convention | marketplace install, own syntax per tool (see below) |
+| any future tool | yes, via the universal `.agents/skills` convention | — |
+
+Skip the picker and install into everything detected, no prompt (for
+scripts/CI):
+
+```bash
+npx llmpvp-plugin install --yes
+```
 
 Only install into the current project instead of globally:
 

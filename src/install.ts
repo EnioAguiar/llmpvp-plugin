@@ -4,7 +4,7 @@ import { targets } from "./targets/index.js";
 import { detectTargets } from "./detect.js";
 import { homeDir, manifestPath } from "./paths.js";
 import { COMMANDS } from "./commandsSource.js";
-import type { Scope, WrittenFile } from "./types.js";
+import type { Scope, Target, WrittenFile } from "./types.js";
 
 export interface InstallResultRow {
   id: string;
@@ -23,25 +23,39 @@ export async function runInstall(
   scope: Scope,
   cwd: string,
   skillMarkdown: string,
+  selectedIds?: string[],
 ): Promise<InstallSummary> {
+  const home = homeDir();
   const detected = await detectTargets(scope, cwd);
-  const byId = new Map(targets.map((t) => [t.id, t]));
+  const byId: Record<string, Target> = Object.fromEntries(targets.map((t) => [t.id, t]));
   const results: InstallResultRow[] = [];
   const allWritten: WrittenFile[] = [];
 
   for (const d of detected) {
-    const target = byId.get(d.id);
-    if (!target || !d.shouldInstall) {
-      results.push({
-        id: d.id,
-        label: d.label,
-        installed: false,
-        reason: d.reason,
-        files: [],
-      });
+    const target = byId[d.id];
+    if (!target) {
+      results.push({ id: d.id, label: d.label, installed: false, reason: d.reason, files: [] });
       continue;
     }
-    const files = await target.install(scope, cwd, homeDir(), skillMarkdown, COMMANDS);
+
+    const structurallyIncompatible =
+      !target.alwaysInstall && target.markerPath(scope, cwd, home) === null;
+
+    const shouldInstall = selectedIds
+      ? selectedIds.includes(d.id) && !structurallyIncompatible
+      : d.shouldInstall;
+
+    if (!shouldInstall) {
+      const reason = structurallyIncompatible
+        ? d.reason
+        : selectedIds
+          ? "not selected"
+          : d.reason;
+      results.push({ id: d.id, label: d.label, installed: false, reason, files: [] });
+      continue;
+    }
+
+    const files = await target.install(scope, cwd, home, skillMarkdown, COMMANDS);
     allWritten.push(...files);
     results.push({ id: d.id, label: d.label, installed: true, files });
   }
