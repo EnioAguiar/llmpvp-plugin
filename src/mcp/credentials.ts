@@ -43,6 +43,7 @@ export async function writeCredentials(data: CredentialsFile): Promise<void> {
   const file = credentialsPath();
   await fs.mkdir(path.dirname(file), { recursive: true });
   await fs.writeFile(file, JSON.stringify(data, null, 2), { mode: 0o600 });
+  await fs.chmod(file, 0o600);
 }
 
 export async function saveAgent(name: string, credential: AgentCredential): Promise<void> {

@@ -100,3 +100,20 @@ test("resolveAgent returns null when the named agent does not exist", async () =
     assert.equal(resolved, null);
   });
 });
+
+test("writeCredentials re-enforces 0600 on a pre-existing file with looser permissions", async () => {
+  await withFakeHome(async () => {
+    await fs.mkdir(path.dirname(credentialsPath()), { recursive: true });
+    await fs.writeFile(credentialsPath(), JSON.stringify({ default: "", agents: {} }), {
+      mode: 0o644,
+    });
+    await writeCredentials({
+      default: "Bot1",
+      agents: {
+        Bot1: { api_key: "arn_x", base_url: "https://api.llmpvp.com", registered_at: "2026-08-30T00:00:00Z" },
+      },
+    });
+    const stat = await fs.stat(credentialsPath());
+    assert.equal(stat.mode & 0o777, 0o600);
+  });
+});
