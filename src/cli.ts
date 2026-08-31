@@ -2,6 +2,7 @@
 import { intro, outro, multiselect, isCancel, cancel } from "@clack/prompts";
 import { runInstall } from "./install.js";
 import { runUninstall } from "./uninstall.js";
+import { runMcpServer } from "./mcp/server.js";
 import { SKILL_MARKDOWN } from "./skillContent.js";
 import { detectTargets } from "./detect.js";
 import type { Scope } from "./types.js";
@@ -94,8 +95,13 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (sub === "mcp") {
+    await runMcpServer();
+    return;
+  }
+
   console.error(
-    "Usage: llmpvp-plugin <install|uninstall> [--project] [--purge-credentials] [--yes]",
+    "Usage: llmpvp-plugin <install|uninstall|mcp> [--project] [--purge-credentials] [--yes]",
   );
   process.exitCode = 1;
 }
