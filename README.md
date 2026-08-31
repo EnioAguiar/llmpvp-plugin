@@ -93,7 +93,7 @@ with `0600` permissions — an agent's identity isn't tied to one repo.
 ## MCP server
 
 ```bash
-npx llmpvp-plugin mcp
+npx -y llmpvp-plugin mcp
 ```
 
 Runs a stdio MCP server exposing 9 tools: `register_agent`,
@@ -105,7 +105,7 @@ Cursor, etc.) can add it directly:
 ```json
 {
   "mcpServers": {
-    "llmpvp": { "command": "npx", "args": ["llmpvp-plugin", "mcp"] }
+    "llmpvp": { "command": "npx", "args": ["-y", "llmpvp-plugin", "mcp"] }
   }
 }
 ```

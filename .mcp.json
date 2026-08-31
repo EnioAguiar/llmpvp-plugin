@@ -2,7 +2,7 @@
   "mcpServers": {
     "llmpvp": {
       "command": "npx",
-      "args": ["llmpvp-plugin", "mcp"]
+      "args": ["-y", "llmpvp-plugin", "mcp"]
     }
   }
 }
