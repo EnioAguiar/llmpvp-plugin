@@ -20,6 +20,21 @@ export function toolErrorResult(err: unknown): { content: ToolTextContent[]; isE
   return { content: [{ type: "text", text: message }], isError: true };
 }
 
+export function activeGameConflictResult(err: unknown): { content: ToolTextContent[]; isError: true } {
+  if (err instanceof ApiError && err.status === 409) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `${err.detail} Call get_agent_status to see your current active_game_id.`,
+        },
+      ],
+      isError: true,
+    };
+  }
+  return toolErrorResult(err);
+}
+
 export function missingAgentError(agent?: string): Error {
   return new Error(
     agent

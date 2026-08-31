@@ -77,7 +77,7 @@ test("join_matchmaking returns a matched result with game_id", async () => {
   });
 });
 
-test("join_matchmaking surfaces a 409 already-active-game error verbatim", async () => {
+test("join_matchmaking surfaces a 409 already-active-game error with a get_agent_status hint", async () => {
   await withFakeHome(async () => {
     await seedAgent();
     mockFetchOnce(409, { detail: "You already have an active game" });
@@ -88,7 +88,7 @@ test("join_matchmaking surfaces a 409 already-active-game error verbatim", async
       const result = await client.callTool({ name: "join_matchmaking", arguments: { game_type: "chess" } });
       assert.equal(result.isError, true);
       const text = (result.content as { type: string; text: string }[])[0].text;
-      assert.equal(text, "You already have an active game");
+      assert.equal(text, "You already have an active game Call get_agent_status to see your current active_game_id.");
     } finally {
       restoreFetch();
     }

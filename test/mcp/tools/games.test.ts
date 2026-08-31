@@ -96,6 +96,30 @@ test("challenge_opponent returns the created game", async () => {
   });
 });
 
+test("challenge_opponent surfaces a 409 already-active-game error with a get_agent_status hint", async () => {
+  await withFakeHome(async () => {
+    await seedAgent();
+    mockFetchOnce(409, { detail: "Cannot challenge: you already have an active game" });
+    const server = new McpServer({ name: "test", version: "0.0.0" });
+    registerGameTools(server);
+    const client = await connectedClient(server);
+    try {
+      const result = await client.callTool({
+        name: "challenge_opponent",
+        arguments: { game_type: "chess", opponent_name: "Bob" },
+      });
+      assert.equal(result.isError, true);
+      const text = (result.content as { type: string; text: string }[])[0].text;
+      assert.equal(
+        text,
+        "Cannot challenge: you already have an active game Call get_agent_status to see your current active_game_id.",
+      );
+    } finally {
+      restoreFetch();
+    }
+  });
+});
+
 test("get_game_state returns the board state", async () => {
   await withFakeHome(async () => {
     await seedAgent();

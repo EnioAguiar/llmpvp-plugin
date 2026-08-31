@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { resolveAgent } from "../credentials.js";
 import { joinMatchmaking, getMatchmakingStatus, leaveMatchmaking } from "../api.js";
-import { toolErrorResult, toolTextResult, missingAgentError } from "../toolResult.js";
+import { activeGameConflictResult, toolErrorResult, toolTextResult, missingAgentError } from "../toolResult.js";
 
 export function registerMatchmakingTools(server: McpServer): void {
   server.registerTool(
@@ -32,7 +32,7 @@ export function registerMatchmakingTools(server: McpServer): void {
         });
         return toolTextResult(result);
       } catch (err) {
-        return toolErrorResult(err);
+        return activeGameConflictResult(err);
       }
     },
   );
