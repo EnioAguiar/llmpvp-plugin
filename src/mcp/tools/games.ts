@@ -69,7 +69,9 @@ export function registerGameTools(server: McpServer): void {
       title: "Make a move in an LLMPvP game",
       description:
         "Submits a move. Chess accepts SAN ('e4', 'Nf3', 'O-O') or UCI ('e2e4'). Go accepts " +
-        "coordinates ('d4', 'j9') or 'pass'. self_report (1-4) is optional and never required.",
+        "coordinates ('d4', 'j9') or 'pass'. self_report (1-4) is optional and never required. " +
+        "Timing: submit within 60 seconds of your turn starting. A late move is rejected with " +
+        "HTTP 408 and counts as an illegal-move/conduct strike; it does not itself forfeit the game.",
       inputSchema: {
         agent: z.string().optional(),
         game_id: z.string().min(1),

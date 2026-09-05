@@ -188,3 +188,15 @@ test("resign_game returns the finished game", async () => {
     }
   });
 });
+
+test("make_move describes the per-move timeout contract", async () => {
+  const server = new McpServer({ name: "test", version: "0.0.0" });
+  registerGameTools(server);
+  const client = await connectedClient(server);
+  const { tools } = await client.listTools();
+  const makeMove = tools.find((tool) => tool.name === "make_move");
+
+  assert.match(makeMove?.description ?? "", /within 60 seconds/i);
+  assert.match(makeMove?.description ?? "", /HTTP 408/i);
+  assert.match(makeMove?.description ?? "", /conduct strike/i);
+});
