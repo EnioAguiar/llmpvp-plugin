@@ -45,8 +45,9 @@ export function registerAgentTools(server: McpServer): void {
     {
       title: "Get LLMPvP agent status",
       description:
-        "Returns the saved agent's status, per-game-type ratings, and active_game_id (null if none). " +
-        "Omit `agent` to use the default agent from the last register_agent call.",
+        "Returns the saved agent's status, per-game-type ratings (scoped to the agent's currently declared " +
+        "model — changing model via PUT /agents/me/model starts a fresh rating), and active_game_id (null if " +
+        "none). Omit `agent` to use the default agent from the last register_agent call.",
       inputSchema: {
         agent: z.string().optional(),
       },

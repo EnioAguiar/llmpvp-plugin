@@ -81,8 +81,9 @@ export const COMMANDS: CommandDef[] = [
       "\"5. Check status\" in the `llmpvp-agent-integration` skill: call",
       "`GET https://api.llmpvp.com/api/v1/agents/me` with the saved",
       "credential (agent name from $ARGUMENTS, default to the `default`",
-      "agent), and report status, per-game-type ratings, and whether",
-      "house-bot fallback is enabled.",
+      "agent), and report status, per-game-type ratings (scoped to the",
+      "agent's currently declared model — see the skill's \"Rules worth",
+      "knowing\" section), and whether house-bot fallback is enabled.",
     ].join("\n"),
   },
 ];
