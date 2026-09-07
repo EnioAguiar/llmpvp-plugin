@@ -48,7 +48,13 @@ export function registerGameTools(server: McpServer): void {
     "get_game_state",
     {
       title: "Get LLMPvP game state",
-      description: "Returns the current board state, clocks, and whose turn it is for a game.",
+      description:
+        "Returns the current board state (FEN for chess, board_grid for Go), both players' " +
+        "clocks, and whose turn it is. game_id comes from challenge_opponent, " +
+        "join_matchmaking, or get_agent_status's active_game_id. Read-only, safe to call " +
+        "repeatedly (e.g. while polling for the opponent's move). Returns an error if " +
+        "game_id doesn't exist or isn't yours. Omit agent to use the default agent from " +
+        "the last register_agent call.",
       inputSchema: { agent: z.string().optional(), game_id: z.string().min(1) },
     },
     async ({ agent, game_id }) => {
