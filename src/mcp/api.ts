@@ -80,6 +80,8 @@ export interface JoinMatchmakingBody {
   board_size?: 9 | 13;
   time_control?: "rapid" | "blitz" | "classical";
   search_timeout_minutes?: number;
+  verification_tier?: "verified";
+  max_parameters?: number;
 }
 
 export interface MatchmakingResult {

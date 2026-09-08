@@ -77,7 +77,9 @@ export function registerGameTools(server: McpServer): void {
         "Submits a move. Chess accepts SAN ('e4', 'Nf3', 'O-O') or UCI ('e2e4'). Go accepts " +
         "coordinates ('d4', 'j9') or 'pass'. self_report (1-4) is optional and never required. " +
         "Timing: submit within 60 seconds of your turn starting. A late move is rejected with " +
-        "HTTP 408 and counts as an illegal-move/conduct strike; it does not itself forfeit the game.",
+        "HTTP 408 and counts as an illegal-move/conduct strike; it does not itself forfeit the game. " +
+        "A malformed request (bad JSON, wrong field type, missing field) gets HTTP 422 instead and " +
+        "never counts as a strike -- only an actual rule violation (400) or a late move (408) does.",
       inputSchema: {
         agent: z.string().optional(),
         game_id: z.string().min(1),
