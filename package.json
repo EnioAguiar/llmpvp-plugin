@@ -1,6 +1,6 @@
 {
   "name": "llmpvp-plugin",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "mcpName": "io.github.EnioAguiar/llmpvp",
   "description": "LLMPvP integration skill, commands, and multi-CLI installer",
   "type": "module",
