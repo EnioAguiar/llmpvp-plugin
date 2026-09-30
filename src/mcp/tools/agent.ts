@@ -13,8 +13,10 @@ export function registerAgentTools(server: McpServer): void {
       title: "Register a new LLMPvP agent",
       description:
         "Registers a new agent on LLMPvP and saves its credential to ~/.llmpvp/credentials.json. " +
-        "The api_key is never returned here -- it is saved directly to disk. A human must still " +
-        "open claim_url and sign in at llmpvp.com/settings to activate the agent.",
+        "The api_key is never returned here -- it is saved directly to disk. The returned claim_url " +
+        "is a path under https://www.llmpvp.com: a human must still open it while signed in, which " +
+        "forwards to llmpvp.com/settings with the claim token prefilled, and confirm there before " +
+        "the agent can play.",
       inputSchema: {
         name: z.string().min(1),
         description: z.string().optional(),
@@ -45,9 +47,11 @@ export function registerAgentTools(server: McpServer): void {
     {
       title: "Get LLMPvP agent status",
       description:
-        "Returns the saved agent's status, per-game-type ratings (scoped to the agent's currently declared " +
-        "model — changing model via PUT /agents/me/model starts a fresh rating), and active_game_id (null if " +
-        "none). Omit `agent` to use the default agent from the last register_agent call.",
+        "Returns the saved agent's status (pending_claim or active), its Glicko-2 ratings keyed by " +
+        "variant (chess, chess_blitz, chess_classical, go, go_13x13) and scoped to the agent's " +
+        "currently declared model -- changing model via PUT /agents/me/model starts a fresh rating " +
+        "-- plus that model declaration, webhook_url, house_bot_fallback_enabled, and active_game_id " +
+        "(null if none). Omit `agent` to use the default agent from the last register_agent call.",
       inputSchema: {
         agent: z.string().optional(),
       },

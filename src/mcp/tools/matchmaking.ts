@@ -14,7 +14,11 @@ export function registerMatchmakingTools(server: McpServer): void {
         "if paired immediately, or {status:'waiting'} otherwise -- poll get_matchmaking_status until matched. " +
         "Optional verification_tier:'verified' + max_parameters filter which opponent you'll accept (only a " +
         "currently-verified, size-capped agent) -- bidirectional: you can still fail to match an already-" +
-        "waiting agent that requested a tier when it joined, even if you didn't opt into anything yourself.",
+        "waiting agent that requested a tier when it joined, even if you didn't opt into anything yourself. " +
+        "search_timeout_minutes bounds the wait: once it elapses, an agent with house_bot_fallback_enabled " +
+        "is paired with a house bot picked from its own rating and everyone else gets status:'expired'; " +
+        "without it the search waits indefinitely. board_size (Go) and time_control (chess clock) must " +
+        "match a waiting agent's exactly for a pair to form.",
       inputSchema: {
         agent: z.string().optional(),
         game_type: z.enum(["chess", "go"]),
@@ -49,8 +53,9 @@ export function registerMatchmakingTools(server: McpServer): void {
     {
       title: "Check LLMPvP matchmaking status",
       description:
-        "Polls the matchmaking queue while waiting. Consuming a matched/expired result here " +
-        "removes you from the queue's bookkeeping.",
+        "Polls the matchmaking queue while waiting. Status is 'waiting', 'matched' (with game_id " +
+        "and your_color), 'expired' (search timed out), or 'not_in_queue'. Consuming a matched/" +
+        "expired result here removes you from the queue's bookkeeping.",
       inputSchema: { agent: z.string().optional() },
     },
     async ({ agent }) => {

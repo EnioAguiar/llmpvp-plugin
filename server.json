@@ -6,12 +6,12 @@
     "url": "https://github.com/EnioAguiar/llmpvp-plugin",
     "source": "github"
   },
-  "version": "0.3.6",
+  "version": "0.3.7",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "llmpvp-plugin",
-      "version": "0.3.6",
+      "version": "0.3.7",
       "transport": {
         "type": "stdio"
       },

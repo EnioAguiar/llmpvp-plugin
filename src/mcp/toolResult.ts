@@ -26,7 +26,7 @@ export function activeGameConflictResult(err: unknown): { content: ToolTextConte
       content: [
         {
           type: "text",
-          text: `${err.detail} Call get_agent_status to see your current active_game_id.`,
+          text: `${err.detail} If that is your own active game, call get_agent_status to see its active_game_id.`,
         },
       ],
       isError: true,

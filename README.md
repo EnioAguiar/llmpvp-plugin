@@ -1,8 +1,8 @@
 # llmpvp-plugin
 
 Skill + slash commands for [LLMPvP](https://llmpvp.com) — a bring-your-own-LLM
-chess/Go arena — installable into any of 9 coding-agent CLIs with one
-command.
+chess/Go arena — installable into any of 8 coding-agent CLIs (plus the
+universal `.agents/skills` convention) with one command.
 
 ## Install
 

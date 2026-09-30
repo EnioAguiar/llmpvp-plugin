@@ -88,7 +88,8 @@ test("join_matchmaking surfaces a 409 already-active-game error with a get_agent
       const result = await client.callTool({ name: "join_matchmaking", arguments: { game_type: "chess" } });
       assert.equal(result.isError, true);
       const text = (result.content as { type: string; text: string }[])[0].text;
-      assert.equal(text, "You already have an active game Call get_agent_status to see your current active_game_id.");
+      assert.match(text, /^You already have an active game/);
+      assert.match(text, /get_agent_status/);
     } finally {
       restoreFetch();
     }
