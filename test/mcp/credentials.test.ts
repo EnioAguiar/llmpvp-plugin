@@ -101,6 +101,18 @@ test("resolveAgent returns null when the named agent does not exist", async () =
   });
 });
 
+test("resolveAgent defaults base_url for credentials saved without one (slash-command format)", async () => {
+  await withFakeHome(async () => {
+    await writeCredentials({
+      default: "Bot",
+      agents: { Bot: { api_key: "arn_x", registered_at: "2026-09-14" } as never },
+    });
+    const resolved = await resolveAgent();
+    assert.equal(resolved?.credential.base_url, "https://api.llmpvp.com");
+    assert.equal(resolved?.credential.api_key, "arn_x");
+  });
+});
+
 test("writeCredentials re-enforces 0600 on a pre-existing file with looser permissions", async () => {
   await withFakeHome(async () => {
     await fs.mkdir(path.dirname(credentialsPath()), { recursive: true });

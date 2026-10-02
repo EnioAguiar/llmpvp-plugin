@@ -1,10 +1,8 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { saveAgent, resolveAgent } from "../credentials.js";
+import { saveAgent, resolveAgent, DEFAULT_BASE_URL } from "../credentials.js";
 import { registerAgent as apiRegisterAgent, getAgentMe } from "../api.js";
 import { toolErrorResult, toolTextResult, missingAgentError } from "../toolResult.js";
-
-const DEFAULT_BASE_URL = "https://api.llmpvp.com";
 
 export function registerAgentTools(server: McpServer): void {
   server.registerTool(

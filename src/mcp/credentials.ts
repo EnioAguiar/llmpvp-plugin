@@ -2,6 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { homeDir } from "../paths.js";
 
+export const DEFAULT_BASE_URL = "https://api.llmpvp.com";
+
 export interface AgentCredential {
   api_key: string;
   base_url: string;
@@ -59,5 +61,8 @@ export async function resolveAgent(name?: string): Promise<ResolvedAgent | null>
   if (!targetName) return null;
   const credential = current.agents[targetName];
   if (!credential) return null;
-  return { name: targetName, credential };
+  // Credentials written by the slash commands/skill (or by hand) carry only
+  // api_key -- base_url is an MCP-side field. Without this default every
+  // MCP tool call built "undefined/api/v1/..." for those agents.
+  return { name: targetName, credential: { ...credential, base_url: credential.base_url || DEFAULT_BASE_URL } };
 }
