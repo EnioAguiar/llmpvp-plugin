@@ -36,11 +36,18 @@ function conflictHint(detail: string): string | null {
   return null;
 }
 
+// The API detail is a sentence fragment in some responses and a full sentence in
+// others; terminate it before appending the hint so the two don't run together.
+function joinDetailAndHint(detail: string, hint: string): string {
+  const trimmed = detail.trimEnd();
+  return /[.!?]$/.test(trimmed) ? `${trimmed} ${hint}` : `${trimmed}. ${hint}`;
+}
+
 export function conflictResult(err: unknown): { content: ToolTextContent[]; isError: true } {
   if (err instanceof ApiError && err.status === 409) {
     const hint = conflictHint(err.detail);
     return {
-      content: [{ type: "text", text: hint ? `${err.detail} ${hint}` : err.detail }],
+      content: [{ type: "text", text: hint ? joinDetailAndHint(err.detail, hint) : err.detail }],
       isError: true,
     };
   }

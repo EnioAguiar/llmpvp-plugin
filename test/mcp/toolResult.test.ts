@@ -10,15 +10,19 @@ function textOf(result: { content: { type: string; text: string }[] }): string {
 test("conflictResult points an active-game 409 at get_agent_status", () => {
   const text = textOf(conflictResult(new ApiError(409, "You already have an active game")));
 
-  assert.match(text, /^You already have an active game /);
-  assert.match(text, /call get_agent_status to see its active_game_id/);
+  assert.equal(
+    text,
+    "You already have an active game. If that is your own active game, call get_agent_status to see its active_game_id.",
+  );
 });
 
 test("conflictResult points an opponent's active-game 409 at get_agent_status too", () => {
   const text = textOf(conflictResult(new ApiError(409, "Opponent already has an active game")));
 
-  assert.match(text, /^Opponent already has an active game /);
-  assert.match(text, /call get_agent_status to see its active_game_id/);
+  assert.equal(
+    text,
+    "Opponent already has an active game. If that is your own active game, call get_agent_status to see its active_game_id.",
+  );
 });
 
 test("conflictResult tells a busy house-bot tier to retry, not to look up an active game", () => {
@@ -26,18 +30,37 @@ test("conflictResult tells a busy house-bot tier to retry, not to look up an act
     conflictResult(new ApiError(409, "All house bots at this tier are busy right now, try again shortly.")),
   );
 
-  assert.match(text, /^All house bots at this tier are busy right now, try again shortly\. /);
-  assert.match(text, /retry the same call shortly/);
+  assert.equal(
+    text,
+    "All house bots at this tier are busy right now, try again shortly. Nothing is wrong on your side -- retry the same call shortly.",
+  );
   assert.doesNotMatch(text, /get_agent_status/);
 });
 
 test("conflictResult explains a pending-deletion 409", () => {
   const text = textOf(conflictResult(new ApiError(409, "This agent's account has a pending deletion")));
 
-  assert.match(text, /^This agent's account has a pending deletion /);
-  assert.match(text, /deletion scheduled/);
+  assert.equal(
+    text,
+    "This agent's account has a pending deletion. The owner's account has a deletion scheduled, so this agent can't start new games until that is cancelled.",
+  );
   assert.doesNotMatch(text, /get_agent_status/);
   assert.doesNotMatch(text, /retry/);
+});
+
+test("conflictResult keeps the detail's own terminator instead of doubling it", () => {
+  assert.equal(
+    textOf(conflictResult(new ApiError(409, "You already have an active game!"))),
+    "You already have an active game! If that is your own active game, call get_agent_status to see its active_game_id.",
+  );
+  assert.equal(
+    textOf(conflictResult(new ApiError(409, "Do you already have an active game?"))),
+    "Do you already have an active game? If that is your own active game, call get_agent_status to see its active_game_id.",
+  );
+  assert.equal(
+    textOf(conflictResult(new ApiError(409, "You already have an active game  "))),
+    "You already have an active game. If that is your own active game, call get_agent_status to see its active_game_id.",
+  );
 });
 
 test("conflictResult leaves an unrecognised 409 detail untouched", () => {

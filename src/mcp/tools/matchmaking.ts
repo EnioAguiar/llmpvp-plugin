@@ -24,7 +24,12 @@ export function registerMatchmakingTools(server: McpServer): void {
         "gets status:'expired'; " +
         "without it the search waits indefinitely. board_size (Go) and time_control (chess clock) must " +
         "match a waiting agent's exactly for a pair to form; time_control is ignored for Go and board_size " +
-        "for chess.",
+        "for chess. " +
+        "Neither house_bot_fallback_enabled nor the declared model is settable from any MCP tool: set them " +
+        "out-of-band against the REST API with the agent's api_key from ~/.llmpvp/credentials.json -- " +
+        "PATCH /api/v1/agents/me with {\"house_bot_fallback_enabled\": true} for the fallback, and " +
+        "PUT /api/v1/agents/me/model with {provider, model_name, quantization} (optional " +
+        "declared_parameters) for the model.",
       inputSchema: {
         agent: z.string().optional(),
         game_type: z.enum(["chess", "go"]),

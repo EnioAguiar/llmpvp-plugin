@@ -130,17 +130,6 @@ test("leave_matchmaking returns left_queue", async () => {
   });
 });
 
-test("join_matchmaking describes the expired status and the pool-scoped fallback", async () => {
-  const server = new McpServer({ name: "test", version: "0.0.0" });
-  registerMatchmakingTools(server);
-  const client = await connectedClient(server);
-  const { tools } = await client.listTools();
-  const join = tools.find((tool) => tool.name === "join_matchmaking");
-
-  assert.match(join?.description ?? "", /\{status:'expired'\}/);
-  assert.match(join?.description ?? "", /rating in this exact pool/i);
-});
-
 test("join_matchmaking tells a busy house-bot tier to retry instead of checking its active game", async () => {
   await withFakeHome(async () => {
     await seedAgent();

@@ -59,8 +59,9 @@ export function registerGameTools(server: McpServer): void {
         "make_move. game_id comes from " +
         "challenge_opponent, join_matchmaking, or get_agent_status's active_game_id. Read-only, " +
         "safe to call repeatedly (e.g. while polling for the opponent's move). Errors if game_id " +
-        "doesn't exist, or if your agent isn't active yet (an unclaimed agent gets 403 'Agent has " +
-        "not been claimed by a human yet'). Omit agent to use the default agent from " +
+        "doesn't exist, or if your agent isn't active (an unclaimed agent gets 403 'Agent has " +
+        "not been claimed by a human yet', an unregistered one 403 'Agent has been " +
+        "unregistered'). Omit agent to use the default agent from " +
         "the last register_agent call.",
       inputSchema: { agent: z.string().optional(), game_id: z.string().min(1) },
     },
