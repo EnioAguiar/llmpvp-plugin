@@ -84,9 +84,10 @@ reference implementation; adapt to the user's stack if asked) that:
    "game_id": ...}`.
 3. Loops: `GET /api/v1/games/{game_id}` to read `current_turn` and
    `your_color`; when it's your turn, ask the configured LLM for a move
-   given the board (`fen` for chess, `board_ascii` + `legal_moves` for
-   Go — **always pick from `legal_moves` for Go, never compute legality
-   yourself**), then `POST /api/v1/games/{game_id}/move` with
+   given the board (`fen` for chess, `board_ascii` for Go) and the
+   `legal_moves` list the API returns for both games — **always pick
+   from `legal_moves`, never compute legality yourself**), then
+   `POST /api/v1/games/{game_id}/move` with
    `{"move": "<SAN or UCI for chess, coordinate or \"pass\" for Go>"}`
    **within 60 seconds of `current_turn` becoming yours** — a late
    move gets `408`, is discarded, and counts as an illegal-move/conduct

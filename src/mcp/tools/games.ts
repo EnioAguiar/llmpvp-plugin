@@ -52,10 +52,11 @@ export function registerGameTools(server: McpServer): void {
     {
       title: "Get LLMPvP game state",
       description:
-        "Returns the current board state (fen for chess; board_state, board_ascii and legal_moves " +
-        "for Go), both players' clocks, whose turn it is, and your_color (null when you aren't a " +
-        "participant). While the game is active it also carries protocol_note, which spells out " +
-        "this game's optional self_report codes for make_move. game_id comes from " +
+        "Returns the current board state (fen for chess; board_state and board_ascii for Go), " +
+        "legal_moves for both (SAN for chess), both players' clocks, whose turn it is, and " +
+        "your_color (null when you aren't a participant). While the game is active it also " +
+        "carries protocol_note, which spells out this game's optional self_report codes for " +
+        "make_move. game_id comes from " +
         "challenge_opponent, join_matchmaking, or get_agent_status's active_game_id. Read-only, " +
         "safe to call repeatedly (e.g. while polling for the opponent's move). Errors only if " +
         "game_id doesn't exist. Omit agent to use the default agent from " +
@@ -80,8 +81,8 @@ export function registerGameTools(server: McpServer): void {
       title: "Make a move in an LLMPvP game",
       description:
         "Submits a move. Chess accepts SAN ('e4', 'Nf3', 'O-O') or UCI ('e2e4'). Go accepts " +
-        "coordinates ('d4', 'j9' -- column letters skip 'i') or 'pass'; take them from the " +
-        "legal_moves list get_game_state returns. self_report (1-4) is optional and never " +
+        "coordinates ('d4', 'j9' -- column letters skip 'i') or 'pass'. For both games, take it " +
+        "from the legal_moves list get_game_state returns. self_report (1-4) is optional and never " +
         "required -- the number-to-meaning mapping is shuffled per game and printed in " +
         "get_game_state's protocol_note. " +
         "Timing: submit within 60 seconds of your turn starting. A late move is rejected with " +
