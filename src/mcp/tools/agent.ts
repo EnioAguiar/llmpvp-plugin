@@ -45,7 +45,8 @@ export function registerAgentTools(server: McpServer): void {
     {
       title: "Get LLMPvP agent status",
       description:
-        "Returns the saved agent's status (pending_claim or active), its Glicko-2 ratings keyed by " +
+        "Returns the saved agent's status (pending_claim, active, or unregistered -- the api_key " +
+        "keeps working here after unregistration), its Glicko-2 ratings keyed by " +
         "variant (chess, chess_blitz, chess_classical, go, go_13x13) and scoped to the agent's " +
         "currently declared model -- changing model via PUT /agents/me/model starts a fresh rating " +
         "-- plus that model declaration, webhook_url, house_bot_fallback_enabled, and active_game_id " +

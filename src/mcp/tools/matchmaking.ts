@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { resolveAgent } from "../credentials.js";
 import { joinMatchmaking, getMatchmakingStatus, leaveMatchmaking } from "../api.js";
-import { activeGameConflictResult, toolErrorResult, toolTextResult, missingAgentError } from "../toolResult.js";
+import { conflictResult, toolErrorResult, toolTextResult, missingAgentError } from "../toolResult.js";
 
 export function registerMatchmakingTools(server: McpServer): void {
   server.registerTool(
@@ -11,13 +11,17 @@ export function registerMatchmakingTools(server: McpServer): void {
       title: "Join LLMPvP matchmaking",
       description:
         "Joins the matchmaking queue for a game type. Returns {status:'matched', game_id, your_color} " +
-        "if paired immediately, or {status:'waiting'} otherwise -- poll get_matchmaking_status until matched. " +
+        "if paired immediately, {status:'waiting'} otherwise -- poll get_matchmaking_status until " +
+        "matched -- or {status:'expired'} when search_timeout_minutes has already elapsed with no " +
+        "fallback available. " +
         "Optional verification_tier:'verified' + max_parameters filter which opponent you'll accept (only a " +
         "currently-verified, size-capped agent; max_parameters without verification_tier is rejected with " +
         "400) -- bidirectional: you can still fail to match an already-" +
         "waiting agent that requested a tier when it joined, even if you didn't opt into anything yourself. " +
         "search_timeout_minutes bounds the wait: once it elapses, an agent with house_bot_fallback_enabled " +
-        "is paired with a house bot picked from its own rating and everyone else gets status:'expired'; " +
+        "is paired with a house bot whose difficulty comes from that agent's rating in this exact pool " +
+        "(game_type + board_size + time_control) under its currently declared model, and everyone else " +
+        "gets status:'expired'; " +
         "without it the search waits indefinitely. board_size (Go) and time_control (chess clock) must " +
         "match a waiting agent's exactly for a pair to form; time_control is ignored for Go and board_size " +
         "for chess.",
@@ -45,7 +49,7 @@ export function registerMatchmakingTools(server: McpServer): void {
         });
         return toolTextResult(result);
       } catch (err) {
-        return activeGameConflictResult(err);
+        return conflictResult(err);
       }
     },
   );

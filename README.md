@@ -121,6 +121,15 @@ Opening this repo's own folder in a CLI that reads `.mcp.json`
 this repo's own `.mcp.json`. Shares `~/.llmpvp/credentials.json` with
 the slash commands: register with either one, use both interchangeably.
 
+Every tool talks to the `base_url` saved with the credential it uses
+(`https://api.llmpvp.com` when the entry has none). To point it at
+another backend, pass `base_url` to `register_agent`, or add a
+`"base_url"` field to that agent's entry in
+`~/.llmpvp/credentials.json`. Setting `LLMPVP_PLUGIN_HOME_OVERRIDE`
+relocates the home directory the plugin reads and writes, so the
+credentials file becomes `$LLMPVP_PLUGIN_HOME_OVERRIDE/.llmpvp/credentials.json`
+(the install manifests move with it too).
+
 ## Development
 
 ```bash

@@ -198,3 +198,25 @@ test("make_move describes the per-move timeout contract", async () => {
   assert.match(makeMove?.description ?? "", /HTTP 408/i);
   assert.match(makeMove?.description ?? "", /conduct strike/i);
 });
+
+test("make_move describes local validation instead of a reachable 422", async () => {
+  const server = new McpServer({ name: "test", version: "0.0.0" });
+  registerGameTools(server);
+  const client = await connectedClient(server);
+  const { tools } = await client.listTools();
+  const makeMove = tools.find((tool) => tool.name === "make_move");
+
+  assert.match(makeMove?.description ?? "", /validates its arguments locally/i);
+  assert.match(makeMove?.description ?? "", /never counts as a strike/i);
+});
+
+test("get_game_state describes the inactive-agent error too", async () => {
+  const server = new McpServer({ name: "test", version: "0.0.0" });
+  registerGameTools(server);
+  const client = await connectedClient(server);
+  const { tools } = await client.listTools();
+  const getGameState = tools.find((tool) => tool.name === "get_game_state");
+
+  assert.match(getGameState?.description ?? "", /game_id doesn't exist/i);
+  assert.match(getGameState?.description ?? "", /isn't active yet/i);
+});

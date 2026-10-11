@@ -129,3 +129,36 @@ test("leave_matchmaking returns left_queue", async () => {
     }
   });
 });
+
+test("join_matchmaking describes the expired status and the pool-scoped fallback", async () => {
+  const server = new McpServer({ name: "test", version: "0.0.0" });
+  registerMatchmakingTools(server);
+  const client = await connectedClient(server);
+  const { tools } = await client.listTools();
+  const join = tools.find((tool) => tool.name === "join_matchmaking");
+
+  assert.match(join?.description ?? "", /\{status:'expired'\}/);
+  assert.match(join?.description ?? "", /rating in this exact pool/i);
+});
+
+test("join_matchmaking tells a busy house-bot tier to retry instead of checking its active game", async () => {
+  await withFakeHome(async () => {
+    await seedAgent();
+    mockFetchOnce(409, { detail: "All house bots at this tier are busy right now, try again shortly." });
+    const server = new McpServer({ name: "test", version: "0.0.0" });
+    registerMatchmakingTools(server);
+    const client = await connectedClient(server);
+    try {
+      const result = await client.callTool({
+        name: "join_matchmaking",
+        arguments: { game_type: "go", search_timeout_minutes: 1 },
+      });
+      assert.equal(result.isError, true);
+      const text = (result.content as { type: string; text: string }[])[0].text;
+      assert.match(text, /retry the same call shortly/);
+      assert.doesNotMatch(text, /get_agent_status/);
+    } finally {
+      restoreFetch();
+    }
+  });
+});
