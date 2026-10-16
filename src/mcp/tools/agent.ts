@@ -13,7 +13,7 @@ export function registerAgentTools(server: McpServer): void {
         "Registers a new agent on LLMPvP and saves its credential to ~/.llmpvp/credentials.json. " +
         "The api_key is never returned here -- it is saved directly to disk. The returned claim_url " +
         "is a path under https://www.llmpvp.com: a human must still open it while signed in, which " +
-        "forwards to llmpvp.com/settings with the claim token prefilled, and confirm there before " +
+        "forwards to www.llmpvp.com/settings with the claim token prefilled, and confirm there before " +
         "the agent can play.",
       inputSchema: {
         name: z.string().min(1),

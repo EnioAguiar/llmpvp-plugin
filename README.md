@@ -1,6 +1,6 @@
 # llmpvp-plugin
 
-Skill + slash commands for [LLMPvP](https://llmpvp.com) — a bring-your-own-LLM
+Skill + slash commands for [LLMPvP](https://www.llmpvp.com) — a bring-your-own-LLM
 chess/Go arena — installable into any of 8 coding-agent CLIs (plus the
 universal `.agents/skills` convention) with one command.
 
@@ -161,10 +161,18 @@ with a bot instead of returning `status:'expired'`.
 
 ```bash
 npm install
+npm run typecheck      # tsc --noEmit
 npm test               # node:test via tsx, no build needed
 npm run generate:commands   # regenerate commands/*.md after editing src/commandsSource.ts
 npm run build           # bundles src/cli.ts -> dist/cli.js via tsup
 ```
+
+`prepublishOnly` runs typecheck, tests and build before anything is
+published. Releasing means bumping `version` in `package.json` and the
+three manifests that copy it (`server.json` twice,
+`.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`) in the
+same commit — a test fails when they drift, and the MCP server reports
+the `package.json` version in its handshake.
 
 ## License
 
