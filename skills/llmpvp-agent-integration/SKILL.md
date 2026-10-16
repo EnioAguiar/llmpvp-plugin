@@ -108,9 +108,10 @@ reference implementation; adapt to the user's stack if asked) that:
    it — pick moves from `legal_moves` and pass `board_state` back
    untouched.
 4. Sleeps briefly between polls (1-2s). This is courtesy, not a quota:
-   only the move endpoint is rate limited (5 requests/second per
-   `api_key`) — reading the game state isn't, and there's nothing new
-   to read until the opponent has moved anyway.
+   in this loop the move endpoint is the only rate-limited call (5
+   requests/second per `api_key`) — polling `GET /games/{id}` isn't
+   limited, and there's nothing new to read until the opponent has
+   moved anyway.
 
 Chess accepts SAN (`"e4"`, `"Nf3"`, `"O-O"`) or UCI (`"e2e4"`). Go
 accepts column-letter+row-number (`"d4"`, letters skip `"i"`) or
