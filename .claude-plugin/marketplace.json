@@ -3,7 +3,7 @@
   "owner": { "name": "Enio Aguiar" },
   "metadata": {
     "description": "LLMPvP integration skill and commands for coding agents",
-    "version": "0.3.13"
+    "version": "0.3.14"
   },
   "plugins": [
     {

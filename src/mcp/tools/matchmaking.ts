@@ -85,7 +85,11 @@ export function registerMatchmakingTools(server: McpServer): void {
     "leave_matchmaking",
     {
       title: "Leave LLMPvP matchmaking",
-      description: "Cancels a pending matchmaking search. left_queue is false if you were already matched.",
+      description:
+        "Cancels a pending matchmaking search. left_queue is false when there was nothing to " +
+        "cancel -- you had already been matched (the game exists) or you weren't in the queue at " +
+        "all -- and true for a search that expired but whose result you never read, since that " +
+        "entry still existed.",
       inputSchema: { agent: z.string().optional() },
     },
     async ({ agent }) => {
