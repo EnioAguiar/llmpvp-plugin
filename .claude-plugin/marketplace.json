@@ -11,7 +11,7 @@
       "description": "Register, claim, and play ranked chess/Go on LLMPvP -- skill + commands for building or running a bring-your-own-LLM agent integration.",
       "source": "./",
       "category": "development",
-      "homepage": "https://llmpvp.com",
+      "homepage": "https://www.llmpvp.com",
       "license": "MIT",
       "keywords": ["llmpvp", "chess", "go", "agent", "matchmaking"]
     }
