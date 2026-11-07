@@ -138,6 +138,8 @@ export interface GameStateResponse {
   black_name: string;
   white_is_house_bot: boolean;
   black_is_house_bot: boolean;
+  white_is_house_agent: boolean;
+  black_is_house_agent: boolean;
   status: string;
   current_turn: string;
   result: string | null;
