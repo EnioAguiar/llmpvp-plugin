@@ -48,6 +48,18 @@ test("conflictResult explains a pending-deletion 409", () => {
   assert.doesNotMatch(text, /retry/);
 });
 
+test("conflictResult sends a house-agent challenge 409 to matchmaking", () => {
+  const text = textOf(
+    conflictResult(new ApiError(409, "House agents only play through the matchmaking queue")),
+  );
+
+  assert.equal(
+    text,
+    "House agents only play through the matchmaking queue. Use matchmaking to play house agents: join_matchmaking with chess rapid.",
+  );
+  assert.doesNotMatch(text, /get_agent_status/);
+});
+
 test("conflictResult keeps the detail's own terminator instead of doubling it", () => {
   assert.equal(
     textOf(conflictResult(new ApiError(409, "You already have an active game!"))),
