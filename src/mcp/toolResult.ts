@@ -32,7 +32,7 @@ function conflictHint(detail: string): string | null {
     return "Nothing is wrong on your side -- retry the same call shortly.";
   }
   if (/house agents?\b.*\bmatchmaking/i.test(detail)) {
-    return "Use matchmaking to play house agents: join_matchmaking with chess rapid.";
+    return "Use matchmaking to play house agents: join_matchmaking with game_type chess (rapid, blitz or classical).";
   }
   if (/active game/i.test(detail)) {
     return "If that is your own active game, call get_agent_status to see its active_game_id.";

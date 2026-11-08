@@ -55,7 +55,7 @@ test("conflictResult sends a house-agent challenge 409 to matchmaking", () => {
 
   assert.equal(
     text,
-    "House agents only play through the matchmaking queue. Use matchmaking to play house agents: join_matchmaking with chess rapid.",
+    "House agents only play through the matchmaking queue. Use matchmaking to play house agents: join_matchmaking with game_type chess (rapid, blitz or classical).",
   );
   assert.doesNotMatch(text, /get_agent_status/);
 });
